@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="#2D89FF"
+        android:elevation="@dimen/elevation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tool:text="标题" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_options"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <TextView
+            android:id="@+id/tv_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="16dp"
+            android:gravity="center_vertical"
+            android:paddingVertical="16dp"
+            android:text="意见反馈"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:drawableEndCompat="@mipmap/ic_enter"
+            app:drawableStartCompat="@mipmap/ic_feedback" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#FFE7E7E7" />
+
+        <TextView
+            android:id="@+id/tv_privacy_policy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="16dp"
+            android:gravity="center_vertical"
+            android:paddingVertical="16dp"
+            android:text="隐私政策"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:drawableEndCompat="@mipmap/ic_enter"
+            app:drawableStartCompat="@mipmap/ic_privacy_policy" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#FFE7E7E7" />
+
+        <TextView
+            android:id="@+id/tv_service_terms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="16dp"
+            android:gravity="center_vertical"
+            android:paddingVertical="16dp"
+            android:text="用户协议"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:drawableEndCompat="@mipmap/ic_enter"
+            app:drawableStartCompat="@mipmap/ic_service_terms" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#FFE7E7E7" />
+
+        <TextView
+            android:id="@+id/tv_about_us"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="16dp"
+            android:gravity="center_vertical"
+            android:paddingVertical="16dp"
+            android:text="关于我们"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:drawableEndCompat="@mipmap/ic_enter"
+            app:drawableStartCompat="@mipmap/ic_about_us" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

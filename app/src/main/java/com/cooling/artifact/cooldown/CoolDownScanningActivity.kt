@@ -1,0 +1,182 @@
+package com.cooling.artifact.cooldown
+
+import android.content.Context
+import android.content.Intent
+import android.graphics.Color
+import android.os.Bundle
+import android.view.View
+import android.view.animation.Animation
+import android.view.animation.ScaleAnimation
+import android.view.animation.TranslateAnimation
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
+import com.airbnb.lottie.LottieDrawable
+import com.common.theone.interfaces.common.admodel.AdConfigs
+import com.cooling.artifact.R
+import com.cooling.artifact.adapters.ScanningServiceAdapter
+import com.cooling.artifact.ads.OnSimpleAdEventListener
+import com.cooling.artifact.databinding.ActivityCoolDownScanningBinding
+import com.cooling.artifact.utils.StatusBarUtil
+import com.cooling.artifact.utils.StorageUtils
+import com.cooling.artifact.viewmodels.UtilViewModel
+import com.gatherad.sdk.GatherAdService
+import me.jessyan.autosize.AutoSizeConfig
+
+/**
+ * 降温扫描页
+ */
+class CoolDownScanningActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityCoolDownScanningBinding
+    private lateinit var viewModel: UtilViewModel
+    private val serviceAdapter = ScanningServiceAdapter()
+    private var problemTotal = 0
+
+    companion object {
+        fun newIntent(context: Context): Intent {
+            return Intent(context, CoolDownScanningActivity::class.java)
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityCoolDownScanningBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        StatusBarUtil.setStatusBarColor(this, Color.parseColor("#FF4D77"))
+
+        val temperature = StorageUtils.getTemperature()
+
+        binding.toolbar.tvTitle.text = "温度监控"
+        binding.lavChecking.repeatCount = LottieDrawable.INFINITE
+        binding.lavChecking.playAnimation()
+
+        binding.rvService.adapter = serviceAdapter
+        binding.rvService.layoutManager = GridLayoutManager(this, 6)
+
+        binding.toolbar.ivBack.setOnClickListener {
+            intent?.putExtra("problemTotal", problemTotal)
+            setResult(RESULT_CANCELED, intent)
+            finish()
+        }
+
+        viewModel = UtilViewModel(application)
+        viewModel.app.observe(this, {
+            serviceAdapter.addData(it)
+            problemTotal = problemTotal.inc()
+            binding.tvProblemTotal.text = problemTotal.toString()
+            binding.tvServiceCount.text = problemTotal.toString()
+        })
+        viewModel.scanningState.observe(this, {
+            if (it) {
+                binding.lavChecking.cancelAnimation()
+                binding.groupChecking.visibility = View.INVISIBLE
+                binding.tvTemperature.visibility = View.VISIBLE
+                binding.tvTemperature.text = getString(R.string.temperature, temperature)
+                binding.tvProgress.text = "已扫描完毕"
+                showCoolingLayoutWithAnimation()
+            }
+        })
+        viewModel.getAppDelay()
+
+        if (AdConfigs.getInstance().isAdConfigsDisplay("scanning_native_ad")) {
+            showNativeAd()
+        }
+    }
+
+    override fun onBackPressed() {
+        intent?.putExtra("problemTotal", problemTotal)
+        setResult(RESULT_CANCELED, intent)
+        super.onBackPressed()
+    }
+
+    /**
+     * 显示带动画的降温布局
+     */
+    private fun showCoolingLayoutWithAnimation() {
+        val translateAnim = TranslateAnimation(
+            Animation.RELATIVE_TO_SELF, 0f,
+            Animation.RELATIVE_TO_SELF, 0f,
+            Animation.RELATIVE_TO_SELF, 1f,
+            Animation.RELATIVE_TO_SELF, 0f
+        )
+        translateAnim.duration = 500
+        translateAnim.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation?) {
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                startCompleteActivity()
+            }
+
+            override fun onAnimationRepeat(animation: Animation?) {
+            }
+
+        })
+
+        binding.clOperate.visibility = View.VISIBLE
+        binding.clOperate.startAnimation(translateAnim)
+    }
+
+    /**
+     * 跳转到降温动画页
+     */
+    private fun startCompleteActivity() {
+        if (AdConfigs.getInstance().getAdConfigsType("cool_down_execute_mode", 0) == 1) {
+            val scaleAnim = ScaleAnimation(
+                Animation.RELATIVE_TO_SELF.toFloat(), 0.85f,
+                Animation.RELATIVE_TO_SELF.toFloat(), 0.85f,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f
+            )
+            scaleAnim.duration = 500
+            scaleAnim.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation?) {
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+                    startActivity(CoolDownAnimActivity.newIntent(this@CoolDownScanningActivity))
+                    intent?.putExtra("problemTotal", problemTotal)
+                    setResult(RESULT_OK, intent)
+                    finish()
+                }
+
+                override fun onAnimationRepeat(animation: Animation?) {
+                }
+            })
+            binding.tvCooling.startAnimation(scaleAnim)
+            binding.ivCoolingArrow.startAnimation(scaleAnim)
+        } else {
+            binding.tvCooling.setOnClickListener {
+                startActivity(CoolDownAnimActivity.newIntent(this@CoolDownScanningActivity))
+                intent?.putExtra("problemTotal", problemTotal)
+                setResult(RESULT_OK, intent)
+                finish()
+            }
+        }
+    }
+
+    /**
+     * 显示信息流
+     */
+    private fun showNativeAd() {
+        val width =
+            (((AutoSizeConfig.getInstance().screenWidth / 360f) / AutoSizeConfig.getInstance().initDensity) * 300)
+        GatherAdService.nativeAd("2080bd3e33432dcf")
+            .setBindDislike(true)
+            .bindLifecycle(lifecycle)
+            .setAdSize(width, 0f)
+            .showAd(this, binding.flAdContainer, object : OnSimpleAdEventListener() {
+                override fun onRenderSuccess(view: View) {
+                    binding.cvAdContainer.visibility = View.VISIBLE
+                }
+
+                override fun onAdClose() {
+                    binding.let {
+                        binding.flAdContainer.removeAllViews()
+                        binding.cvAdContainer.visibility = View.GONE
+                    }
+                }
+            })
+    }
+
+}
