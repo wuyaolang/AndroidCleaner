@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/white"
+    tools:context=".views.PcmPlayerActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PCM音频流播放器"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:layout_marginBottom="24dp" />
+
+    <!-- 流媒体URL输入 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="流媒体URL:"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/et_stream_url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="请输入PCM流媒体URL"
+            android:inputType="textUri"
+            android:padding="12dp"
+            android:background="@drawable/edit_text_background"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray" />
+    </LinearLayout>
+
+    <!-- 控制按钮 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+
+        <Button
+            android:id="@+id/btn_start_stream"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="开始播放"
+            android:textColor="@color/white"
+            android:background="@drawable/button_primary"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/btn_stop_stream"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="停止播放"
+            android:textColor="@color/white"
+            android:background="@drawable/button_secondary"
+            android:layout_marginStart="8dp"
+            android:enabled="false" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_pause_resume"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="暂停"
+        android:textColor="@color/white"
+        android:background="@drawable/button_primary"
+        android:layout_marginBottom="16dp"
+        android:enabled="false" />
+
+    <!-- 音量控制 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="音量控制:"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_marginBottom="8dp" />
+
+        <SeekBar
+            android:id="@+id/seekbar_volume"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:progress="100"
+            android:progressTint="@color/blue"
+            android:thumbTint="@color/blue" />
+    </LinearLayout>
+
+    <!-- 状态信息 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="状态: 未开始"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tv_position"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="位置: 00:00"
+            android:textSize="14sp"
+            android:textColor="@color/gray"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/tv_duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="时长: 00:00"
+            android:textSize="14sp"
+            android:textColor="@color/gray" />
+    </LinearLayout>
+
+    <!-- 使用说明 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="使用说明:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1. 输入PCM流媒体URL"
+            android:textSize="14sp"
+            android:textColor="@color/gray"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2. 点击'开始播放'按钮"
+            android:textSize="14sp"
+            android:textColor="@color/gray"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="3. 使用音量滑块调节音量"
+            android:textSize="14sp"
+            android:textColor="@color/gray"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="4. 支持暂停/恢复和停止播放"
+            android:textSize="14sp"
+            android:textColor="@color/gray" />
+    </LinearLayout>
+
+</LinearLayout>
